@@ -86,6 +86,7 @@ const player = new Player ();
 
 //Anchiovy
 const anchiovyArray = [];
+
 class anchiovy {
     constructor (){
         this.x = Math.random() * canvas.width;
@@ -93,13 +94,18 @@ class anchiovy {
         this.radius = 30;
         this.speed = Math.random() * 5 + 1;
         this.distance;
+        this.count = false;
+        this.sound = Math.random() <= 0.5 ? 'sound1' : "sound2";
 
     }
 
     update(){
         this.x -= this.speed;
+        const distX = this.x - player.x;
+        const distY = this.y - player.y;
+        this.distance = Math.sqrt(distX * distX + distY*distY);
     }
-    
+
 
     draw(){
         ctx.fillStyle = "yellow";
@@ -112,17 +118,37 @@ class anchiovy {
 
 }
 
+const eatSound1 = document.createElement('audio');
+eatSound1.src = "./sound/bite_sound.wav";
+
+
 
 function anchiovyControl (){
     if(gameFrame % 50 === 0){
         anchiovyArray.push(new anchiovy());
-        console.log(anchiovyArray.length);
 
     }
     for (let i = 0; i < anchiovyArray.length; i++){
         anchiovyArray[i].update();
         anchiovyArray[i].draw();
+
+        if(anchiovyArray[i].distance < anchiovyArray[i].radius + player.radius){
+            if(!anchiovyArray[i].counted){
+                if(anchiovyArray[i].sound == 'eatSound1'){
+                    eatSound1.play();
+                }
+                score++;
+                anchiovyArray[i].counted = true;
+                anchiovyArray.splice(i, 1);
+            }
+            
+
+        }
+
     }
+   
+
+
 }
 
 
@@ -134,6 +160,8 @@ function animate (){
     anchiovyControl();
     player.update();
     player.draw();
+    ctx.fillStyle = "white";
+    ctx.fillText("points:" + score, 10, 485);
     gameFrame ++;
     requestAnimationFrame(animate);
 
