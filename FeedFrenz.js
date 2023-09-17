@@ -10,7 +10,7 @@ canvas.height = 500;
 //scoring progression
 let score = 0;
 let gameFrame = 0; //to spawn small fishes every 100 frames//
-ctx.font = '50px Georgia'; // to display text
+ctx.font = '30px Georgia'; // to display text
 
 
 //mouse capture
@@ -35,7 +35,16 @@ canvas.addEventListener('mouseup', function(){
 });
 
 
+
 //Player
+const playerFishLeft = new Image();
+playerFishLeft.src = './images/player_fish_left.png';
+
+const playerFishRight = new Image();
+playerFishRight.src = './images/player_fish_right.png';
+
+
+
 class Player {
     constructor(){
         this.x = 0;
@@ -75,6 +84,8 @@ class Player {
         ctx.fill ();
         ctx.closePath();
 
+        ctx.drawImage(playerFishLeft, this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth/4, this.spriteHeight/4);
+
 
     }
 
@@ -95,7 +106,7 @@ class anchiovy {
         this.speed = Math.random() * 5 + 1;
         this.distance;
         this.count = false;
-        this.sound = Math.random() <= 0.5 ? 'sound1' : "sound2";
+        this.sound = 'eatSound1';
 
     }
 
@@ -118,8 +129,10 @@ class anchiovy {
 
 }
 
+
+//to add sound
 const eatSound1 = document.createElement('audio');
-eatSound1.src = "./sound/bite_sound.wav";
+eatSound1.src = './sound/bite_sound.wav';
 
 
 
@@ -161,7 +174,7 @@ function animate (){
     player.update();
     player.draw();
     ctx.fillStyle = "white";
-    ctx.fillText("points:" + score, 10, 485);
+    ctx.fillText("points:" + score, 850, 485);
     gameFrame ++;
     requestAnimationFrame(animate);
 
