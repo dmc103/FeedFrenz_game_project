@@ -72,6 +72,7 @@ class Player {
         this.widthSpriteSheet = 498;
         this.heightSpriteSheet = 327;
     }
+
     //to update player position
     update(){
         const distX = this.x - mouse.x;
@@ -127,6 +128,9 @@ const player = new Player ();
 //Anchiovy
 const anchiovyArray = [];
 
+const anchiovyImagePink = new Image();
+anchiovyImagePink.src = './images/pink_anchiovis.png'; 
+
 
 class anchiovy {
     constructor (){
@@ -137,6 +141,12 @@ class anchiovy {
         this.distance;
         this.count = false;
         this.sound = 'eatSound1';
+        this.angle = 0;
+        this.frameX = 0; 
+        this.frameY = 0; 
+        this.frame = 0; 
+        this.widthSpriteSheet = 503;
+        this.heightSpriteSheet = 165;
     }
 
 
@@ -150,12 +160,19 @@ class anchiovy {
 
 
     draw(){
-        ctx.fillStyle = "yellow";
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.closePath();
-        ctx.stroke();
+        // ctx.fillStyle = "yellow";
+        // ctx.beginPath();
+        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        // ctx.fill();
+        // ctx.closePath();
+        // ctx.stroke();
+        ctx.drawImage(anchiovyImagePink, this.frameX * this.widthSpriteSheet,
+            this.frameY * this.heightSpriteSheet,
+            this.widthSpriteSheet, 
+            this.heightSpriteSheet,
+            this.x - 40, this.y - 15, 
+            this.widthSpriteSheet/7, 
+            this.heightSpriteSheet/7);
     }
 
 }
@@ -175,7 +192,7 @@ eatSound1.src = './sound/bite_sound.wav';
 
 
 function anchiovyControl (){
-    if(gameFrame % 50 === 0){
+    if(gameFrame % 60 === 0){
         anchiovyArray.push(new anchiovy());
 
     }
