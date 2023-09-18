@@ -10,7 +10,7 @@ canvas.height = 500;
 //scoring progression
 let score = 0;
 let gameFrame = 0; //to spawn small fishes every 100 frames//
-ctx.font = '30px Georgia'; // to display text
+ctx.font = '25px Georgia'; // to display text
 
 
 //mouse capture
@@ -95,12 +95,12 @@ class Player {
 
         }
        //to draw a circle that represents the player
-        ctx.fillStyle = "blue";
-        ctx.beginPath();
-        ctx.arc(this.x , this.y , this.radius, 0, Math.PI * 2);
-        ctx.fill ();
-        ctx.closePath();
-        ctx.fillRect(this.x, this.y, this.radius, 10);
+        // ctx.fillStyle = "blue";
+        // ctx.beginPath();
+        // ctx.arc(this.x , this.y , this.radius, 0, Math.PI * 2);
+        // ctx.fill ();
+        // ctx.closePath();
+        // ctx.fillRect(this.x, this.y, this.radius, 10);
 
 
         //To determine which direction the fish should face, based on mouse position
@@ -130,6 +130,9 @@ const anchiovyArray = [];
 
 const anchiovyImagePink = new Image();
 anchiovyImagePink.src = './images/pink_anchiovis.png'; 
+
+const anchiovyImageSilver = new Image();
+anchiovyImageSilver.src = './images/silver_anchiovis.png';
 
 
 class anchiovy {
@@ -175,6 +178,36 @@ class anchiovy {
             this.heightSpriteSheet/7);
     }
 
+};
+
+
+
+class silverAnchiovy extends anchiovy {
+
+    update(){
+        this.x -= this.speed;
+        const distX = this.x - player.x;
+        const distY = this.y - player.y;
+        this.distance = Math.sqrt(distX * distX + distY*distY);
+    }
+
+
+    draw(){
+        // ctx.fillStyle = "white";
+        // ctx.beginPath();
+        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        // ctx.fill();
+        // ctx.closePath();
+        // ctx.stroke();
+        ctx.drawImage(anchiovyImageSilver, this.frameX * this.widthSpriteSheet,
+            this.frameY * this.heightSpriteSheet,
+            this.widthSpriteSheet, 
+            this.heightSpriteSheet,
+            this.x - 40, this.y - 15, 
+            this.widthSpriteSheet/7, 
+            this.heightSpriteSheet/7);
+    }
+
 }
 
 
@@ -194,6 +227,7 @@ eatSound1.src = './sound/bite_sound.wav';
 function anchiovyControl (){
     if(gameFrame % 60 === 0){
         anchiovyArray.push(new anchiovy());
+        anchiovyArray.push(new silverAnchiovy());
 
     }
     for (let i = 0; i < anchiovyArray.length; i++){
