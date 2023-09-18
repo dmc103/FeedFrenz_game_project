@@ -35,14 +35,29 @@ canvas.addEventListener('mouseup', function(){
 });
 
 
+//Initiating the game with the Start Button
+
+// const startButton = document.getElementById('startButton');
+// let gameStarted = false;
+
+
+// startButton.addEventListener('click', function (){
+//     if(!gameStarted){
+//         gameStarted = true;
+//         anchiovyControl();
+//     }
+// });
+
+
+
+
 
 //Player
 const playerFishLeft = new Image();
-playerFishLeft.src = './images/player_fish_left.png';
+playerFishLeft.src = './images/Blue_left_fish.png';
 
 const playerFishRight = new Image();
-playerFishRight.src = './images/player_fish_right.png';
-
+playerFishRight.src = './images/Blue_right_fish.png';
 
 
 class Player {
@@ -51,9 +66,9 @@ class Player {
         this.y = canvas.height / 2;
         this.radius = 30;
         this.angle = 0;
-        this.frameX = 0; //so the fish will face the direction where it is swimming
-        this.frameY = 0; //so the fish will face the direction where it is swimming
-        this.frame = 0; //to track the number of frames in the sprite sheet
+        this.frameX = 0; 
+        this.frameY = 0; 
+        this.frame = 0; 
         this.widthSpriteSheet = 498;
         this.heightSpriteSheet = 327;
     }
@@ -68,6 +83,7 @@ class Player {
             this.y -= distY/20;
         }
     }
+
     draw(){
         if (mouse.click){
             ctx.lineWidth = 0.1;
@@ -83,9 +99,22 @@ class Player {
         ctx.arc(this.x , this.y , this.radius, 0, Math.PI * 2);
         ctx.fill ();
         ctx.closePath();
+        ctx.fillRect(this.x, this.y, this.radius, 10);
 
-        ctx.drawImage(playerFishLeft, this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, this.spriteWidth, this.spriteHeight, this.x, this.y, this.spriteWidth/4, this.spriteHeight/4);
 
+        //To determine which direction the fish should face, based on mouse position
+        const blueFish = mouse.x < this.x ? playerFishLeft : playerFishRight;
+
+
+
+        ctx.drawImage (blueFish, 
+            this.frameX * this.widthSpriteSheet,
+            this.frameY * this.heightSpriteSheet,
+            this.widthSpriteSheet, 
+            this.heightSpriteSheet,
+            this.x - 45, this.y - 30, 
+            this.widthSpriteSheet/6, 
+            this.heightSpriteSheet/6);
 
     }
 
@@ -98,6 +127,7 @@ const player = new Player ();
 //Anchiovy
 const anchiovyArray = [];
 
+
 class anchiovy {
     constructor (){
         this.x = Math.random() * canvas.width;
@@ -107,8 +137,9 @@ class anchiovy {
         this.distance;
         this.count = false;
         this.sound = 'eatSound1';
-
     }
+
+
 
     update(){
         this.x -= this.speed;
@@ -130,9 +161,16 @@ class anchiovy {
 }
 
 
+
+
+
 //to add sound
 const eatSound1 = document.createElement('audio');
 eatSound1.src = './sound/bite_sound.wav';
+
+// const eatSound2 = document.createElement('audio');
+// eatSound2.src = './sound/pop.ogg';
+
 
 
 
@@ -153,9 +191,8 @@ function anchiovyControl (){
                 score++;
                 anchiovyArray[i].counted = true;
                 anchiovyArray.splice(i, 1);
-            }
+            }   
             
-
         }
 
     }

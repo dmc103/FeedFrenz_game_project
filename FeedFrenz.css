@@ -30,6 +30,14 @@ body {
 }
 
 
+#startButton {
+    position: absolute;
+    top: 140px;
+    left: 140px;
+    z-index: 1;
+}
+
+
 
 
 article {
