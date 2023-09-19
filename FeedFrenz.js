@@ -11,11 +11,10 @@ canvas.height = 500;
 //Initialize game state
 let gameStarted = false;
 
-const startButton = document.getElementById('startButton');
-startButton.addEventListener('click', () => {
+function startGame (){
     gameStarted = true;
-});
-
+    document.getElementById('startButton').style.display = 'none';
+};
 
 
 

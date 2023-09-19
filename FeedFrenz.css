@@ -16,18 +16,37 @@ body {
 
 
 #canvas1 {
-    width: 1000px;
-    height: 500px;
+    width: 1200px;
+    height: 600px;
     border: 3px solid rgb(17, 133, 175);
     background-image: url("./images/underwater_scene.jpg");
     background-size: cover;
+    position: relative;
 }
 
 
 #startButton {
+    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 35px;
+    color: peru;
+    width: 950px;
+    height: 50px;
     position: absolute;
-    top: 140px;
-    left: 140px;
+    background-image: url('./images/underwater_scene.jpg');
+    background-size: cover;
+    border-radius:10px;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    outline: none;
 }
 
-
+#introText {
+    position: absolute;
+    top: 400px;
+    left: 50%;
+    transform: translateX(-50%);
+    color:aliceblue;
+    font-size: 25px;
+    font-family:fantasy;
+}
