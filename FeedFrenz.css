@@ -14,12 +14,6 @@ body {
 }
 
 
-.container {
-    width: 900px;
-    height: 700px;
-}
-
-
 
 #canvas1 {
     width: 1000px;
@@ -34,55 +28,6 @@ body {
     position: absolute;
     top: 140px;
     left: 140px;
-    z-index: 1;
 }
 
 
-
-
-article {
-  font-family: monospace;
-  color: white;
-  width: 100%;
-  color: black;
-  font-size: 20px;
-  text-shadow: 1px 1px 1px #737373; 
-  background: darkblue;
-  left: 0;
-  top: 0;
-  width: 100%;
-  text-align: center;
-  height: 30px;
-  line-height: 30px;
-  padding-right: 20px;
-}
-
-
-
-article span, article span > a {
-  color: white;
-}
-
-
-
-footer {
-  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-  position: absolute;
-  width: 100%;
-  color: white;
-  font-size: 15px;
-  text-shadow: 1px 1px 1px #737373; 
-  background: rgba(0,0,0,0.5);
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  text-align: center;
-  height: 30px;
-  line-height: 30px;
-  padding-right: 20px;
-}
-
-
-footer a{
-  color: white;
-}

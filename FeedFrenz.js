@@ -7,20 +7,34 @@ const ctx = canvas.getContext('2d');
 canvas.width = 1000;
 canvas.height = 500;
 
+
+//Initialize game state
+let gameStarted = false;
+
+const startButton = document.getElementById('startButton');
+startButton.addEventListener('click', () => {
+    gameStarted = true;
+});
+
+
+
+
 //scoring progression
 let score = 0;
 let gameFrame = 0; //to spawn small fishes every 100 frames//
 ctx.font = '25px Georgia'; // to display text
 
 
+
 //mouse capture
-let insideCanvas = canvas.getBoundingClientRect(); // track mouse within the canvas
+let insideCanvas = canvas.getBoundingClientRect(); 
 
 const mouse = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     click: false
 }
+
 
 //mouse interactivity
 canvas.addEventListener('mousemove', function(event){
@@ -35,20 +49,12 @@ canvas.addEventListener('mouseup', function(){
 });
 
 
-//Initiating the game with the Start Button
+//To add sound
+const eatSound1 = document.createElement('audio');
+eatSound1.src = './sound/bite_sound.wav';
 
-// const startButton = document.getElementById('startButton');
-// let gameStarted = false;
-
-
-// startButton.addEventListener('click', function (){
-//     if(!gameStarted){
-//         gameStarted = true;
-//         anchiovyControl();
-//     }
-// });
-
-
+const gameover1 = document.createElement('audio');
+gameover1.src = './sound/score_fail.wav';
 
 
 
@@ -87,7 +93,7 @@ class Player {
 
     draw(){
         if (mouse.click){
-            ctx.lineWidth = 0.1;
+            ctx.lineWidth = 0.01;
             ctx.beginPath();
             ctx.moveTo(this.x , this.y);
             ctx.lineTo(mouse.x , mouse.y);
@@ -188,7 +194,7 @@ class silverAnchiovy  {
     constructor () {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.radius = 30;
+        this.radius = 25;
         this.speed = Math.random() * 5 + 1;
         this.distance;
         this.count = false;
@@ -221,7 +227,7 @@ class silverAnchiovy  {
             this.frameY * this.heightSpriteSheet,
             this.widthSpriteSheet, 
             this.heightSpriteSheet,
-            this.x - 40, this.y - 15, 
+            this.x - 30, this.y - 15, 
             this.widthSpriteSheet/9, 
             this.heightSpriteSheet/9);
     }
@@ -230,68 +236,62 @@ class silverAnchiovy  {
 
 
 
-//to add sound
-const eatSound1 = document.createElement('audio');
-eatSound1.src = './sound/bite_sound.wav';
-
-const gameover1 = document.createElement('audio');
-gameover1.src = './sound/score_fail.wav';
-
-
-
-
 
 function anchiovyControl (){
-    if(gameFrame % 70 === 0){
-        anchiovyArray.push(new anchiovy());
-
-    }
-    for (let i = 0; i < anchiovyArray.length; i++){
-        anchiovyArray[i].update();
-        anchiovyArray[i].draw();
-
-        if(anchiovyArray[i].distance < anchiovyArray[i].radius + player.radius){
-            if(!anchiovyArray[i].counted){
-                if(anchiovyArray[i].sound == 'eatSound1'){
-                    eatSound1.play();
-                }
-                score++;
-                anchiovyArray[i].counted = true;
-                anchiovyArray.splice(i, 1);
-            }   
-            
+    if(gameStarted){
+        if(gameFrame % 70 === 0){
+            anchiovyArray.push(new anchiovy());
         }
+        for (let i = 0; i < anchiovyArray.length; i++){
+            anchiovyArray[i].update();
+            anchiovyArray[i].draw();
+
+            if(anchiovyArray[i].distance < anchiovyArray[i].radius + player.radius){
+                if(!anchiovyArray[i].counted){
+                    if(anchiovyArray[i].sound == 'eatSound1'){
+                        eatSound1.play();
+                    }
+                    score++;
+                    anchiovyArray[i].counted = true;
+                    anchiovyArray.splice(i, 1);
+                }
+
+            }
+
+        }
+            
 
     }
+
    
 }
 
 
+
+
 function silverAnchiovyControl (){
-    if(gameFrame % 50 === 0){
-        silverAnchioArray.push(new silverAnchiovy());
+    if(gameStarted){
+        if(gameFrame % 50 === 0){
+            silverAnchioArray.push(new silverAnchiovy());
+        }
+        for(let i = 0; i < silverAnchioArray.length; i++){
+            silverAnchioArray[i].update();
+            silverAnchioArray[i].draw();
 
-    }
-    for(let i = 0; i < silverAnchioArray.length; i++){
-        silverAnchioArray[i].update();
-        silverAnchioArray[i].draw();
-
-        if(silverAnchioArray[i].distance < silverAnchioArray[i].radius + player.radius){
-            if(!silverAnchioArray[i].counted){
-                if(silverAnchioArray[i].sound == 'gameover1'){
-                    gameover1.play();
+            if(silverAnchioArray[i].distance < silverAnchioArray[i].radius + player.radius){
+                if(!silverAnchioArray[i].counted){
+                    if(silverAnchioArray[i].sound == 'gameover1'){
+                        gameover1.play();
+                    }
+                    score -= 1;
+                    silverAnchioArray[i].counted = true;
+                    silverAnchioArray.splice(i,1);
                 }
-                score -= 2;
-                silverAnchioArray[i].counted = true;
-                silverAnchioArray.splice(i, 1);
-
             }
         }
     }
 
-
 }
-
 
 
 
@@ -304,7 +304,7 @@ function animate (){
     player.update();
     player.draw();
     ctx.fillStyle = "white";
-    ctx.fillText("points:" + score, 850, 485);
+    ctx.fillText("Score:" + " " + score, 850, 485);
     gameFrame ++;
     requestAnimationFrame(animate);
 
