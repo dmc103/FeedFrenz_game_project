@@ -23,7 +23,7 @@ const mouse = {
 }
 
 //mouse interactivity
-canvas.addEventListener('mousedown', function(event){
+canvas.addEventListener('mousemove', function(event){
     mouse.click = true;
     mouse.x = event.x - insideCanvas.left;
     mouse.y = event.y - insideCanvas.top;
@@ -62,8 +62,8 @@ playerFishRight.src = './images/Blue_right_fish.png';
 
 class Player {
     constructor(){
-        this.x = 0;
-        this.y = canvas.height / 2;
+        this.x = canvas.height / 2;
+        this.y = 0;
         this.radius = 30;
         this.angle = 0;
         this.frameX = 0; 
@@ -127,6 +127,8 @@ const player = new Player ();
 
 //Anchiovy
 const anchiovyArray = [];
+const silverAnchioArray = [];
+
 
 const anchiovyImagePink = new Image();
 anchiovyImagePink.src = './images/pink_anchiovis.png'; 
@@ -174,15 +176,31 @@ class anchiovy {
             this.widthSpriteSheet, 
             this.heightSpriteSheet,
             this.x - 40, this.y - 15, 
-            this.widthSpriteSheet/7, 
-            this.heightSpriteSheet/7);
+            this.widthSpriteSheet/8, 
+            this.heightSpriteSheet/8);
     }
 
 };
 
 
 
-class silverAnchiovy extends anchiovy {
+class silverAnchiovy  {
+    constructor () {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.radius = 30;
+        this.speed = Math.random() * 5 + 1;
+        this.distance;
+        this.count = false;
+        this.sound = 'gameover1';
+        this.angle = 0;
+        this.frameX = 0; 
+        this.frameY = 0; 
+        this.frame = 0; 
+        this.widthSpriteSheet = 503;
+        this.heightSpriteSheet = 165;
+    }
+
 
     update(){
         this.x -= this.speed;
@@ -193,24 +211,22 @@ class silverAnchiovy extends anchiovy {
 
 
     draw(){
-        // ctx.fillStyle = "white";
-        // ctx.beginPath();
-        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        // ctx.fill();
-        // ctx.closePath();
-        // ctx.stroke();
+        ctx.fillStyle = "#00FF00";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.closePath();
+        ctx.stroke();
         ctx.drawImage(anchiovyImageSilver, this.frameX * this.widthSpriteSheet,
             this.frameY * this.heightSpriteSheet,
             this.widthSpriteSheet, 
             this.heightSpriteSheet,
             this.x - 40, this.y - 15, 
-            this.widthSpriteSheet/7, 
-            this.heightSpriteSheet/7);
+            this.widthSpriteSheet/9, 
+            this.heightSpriteSheet/9);
     }
 
 }
-
-
 
 
 
@@ -218,16 +234,16 @@ class silverAnchiovy extends anchiovy {
 const eatSound1 = document.createElement('audio');
 eatSound1.src = './sound/bite_sound.wav';
 
-// const eatSound2 = document.createElement('audio');
-// eatSound2.src = './sound/pop.ogg';
+const gameover1 = document.createElement('audio');
+gameover1.src = './sound/score_fail.wav';
+
 
 
 
 
 function anchiovyControl (){
-    if(gameFrame % 60 === 0){
+    if(gameFrame % 70 === 0){
         anchiovyArray.push(new anchiovy());
-        anchiovyArray.push(new silverAnchiovy());
 
     }
     for (let i = 0; i < anchiovyArray.length; i++){
@@ -248,9 +264,34 @@ function anchiovyControl (){
 
     }
    
+}
+
+
+function silverAnchiovyControl (){
+    if(gameFrame % 50 === 0){
+        silverAnchioArray.push(new silverAnchiovy());
+
+    }
+    for(let i = 0; i < silverAnchioArray.length; i++){
+        silverAnchioArray[i].update();
+        silverAnchioArray[i].draw();
+
+        if(silverAnchioArray[i].distance < silverAnchioArray[i].radius + player.radius){
+            if(!silverAnchioArray[i].counted){
+                if(silverAnchioArray[i].sound == 'gameover1'){
+                    gameover1.play();
+                }
+                score -= 2;
+                silverAnchioArray[i].counted = true;
+                silverAnchioArray.splice(i, 1);
+
+            }
+        }
+    }
 
 
 }
+
 
 
 
@@ -259,6 +300,7 @@ function anchiovyControl (){
 function animate (){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     anchiovyControl();
+    silverAnchiovyControl();
     player.update();
     player.draw();
     ctx.fillStyle = "white";
@@ -268,3 +310,5 @@ function animate (){
 
 }
 animate();
+
+
