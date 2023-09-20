@@ -16,8 +16,8 @@ body {
 
 
 #canvas1 {
-    width: 1200px;
-    height: 600px;
+    width: 1350px;
+    height: 650px;
     border: 3px solid rgb(17, 133, 175);
     background-image: url("./images/underwater_scene.jpg");
     background-size: cover;
@@ -28,25 +28,64 @@ body {
 #startButton {
     font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     font-size: 35px;
-    color: peru;
+    color: whitesmoke;
     width: 950px;
     height: 50px;
     position: absolute;
-    background-image: url('./images/underwater_scene.jpg');
-    background-size: cover;
+    content: '';
+    background-color:transparent;
     border-radius:10px;
     top: 50%;
     left: 50%;
     transform: translateX(-50%);
     outline: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
+
+#startButton:hover {
+    background-color:rgb(201, 157, 242);
+}
+
 
 #introText {
     position: absolute;
-    top: 400px;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    color:white;
+    font-size: 25px;
+    font-family:fantasy;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    padding: 20px;
+    
+}
+
+#introText:hover, #level1:hover{
+    background-color:rgba(15, 82, 102, 0.767);
+
+}
+
+#level1 {
+    position: absolute;
+    top: 430px;
     left: 50%;
     transform: translateX(-50%);
     color:aliceblue;
     font-size: 25px;
     font-family:fantasy;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    padding:20px;
+}
+
+
+#timer {
+    position: absolute;
+    top: 38px;
+    left: 79%;
+    color:aliceblue;
+    font-family: fantasy;
+    font-size: 22px;
 }

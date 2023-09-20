@@ -4,24 +4,48 @@ const canvas = document.getElementById ("canvas1");
 //to get access to 2D drawing method
 const ctx = canvas.getContext('2d');
 
-canvas.width = 1000;
-canvas.height = 500;
+canvas.width = 1350;
+canvas.height = 650;
 
 
-//Initialize game state
-let gameStarted = false;
+//Initialize game state with start button and timer
+let gameStarted = false; 
+let timer = 120;
 
 function startGame (){
     gameStarted = true;
+    timer = 120;
     document.getElementById('startButton').style.display = 'none';
+    document.getElementById('introText').style.display = 'none';
+    document.getElementById('level1').style.display = 'none';
+    
+    setInterval(countDown, 1000);
 };
+
+    
+
+
+function countDown (){
+    let minutes = Math.floor(timer / 60);
+    let seconds = timer % 60;
+
+    const timerElement = document.getElementById('timer');
+
+    let minutesDisplay = minutes < 10 ? '0' + minutes : minutes;
+    let secondsDisplay = seconds < 10 ? '0' + seconds : seconds;
+
+    timerElement.innerText = minutesDisplay + ':' + secondsDisplay;
+    timer --;
+
+};
+    
 
 
 
 //scoring progression
 let score = 0;
-let gameFrame = 0; //to spawn small fishes every 100 frames//
-ctx.font = '25px Georgia'; // to display text
+let gameFrame = 0;
+ctx.font = '25px fantasy'; // to display text
 
 
 
@@ -52,8 +76,8 @@ canvas.addEventListener('mouseup', function(){
 const eatSound1 = document.createElement('audio');
 eatSound1.src = './sound/bite_sound.wav';
 
-const gameover1 = document.createElement('audio');
-gameover1.src = './sound/score_fail.wav';
+const scoreFail = document.createElement('audio');
+scoreFail.src = './sound/score_fail.wav';
 
 
 
@@ -130,7 +154,7 @@ class Player {
 const player = new Player ();
 
 
-//Anchiovy
+//Anchiovy Arrays
 const anchiovyArray = [];
 const silverAnchioArray = [];
 
@@ -197,7 +221,7 @@ class silverAnchiovy  {
         this.speed = Math.random() * 5 + 1;
         this.distance;
         this.count = false;
-        this.sound = 'gameover1';
+        this.sound = 'scoreFail';
         this.angle = 0;
         this.frameX = 0; 
         this.frameY = 0; 
@@ -270,7 +294,7 @@ function anchiovyControl (){
 
 function silverAnchiovyControl (){
     if(gameStarted){
-        if(gameFrame % 50 === 0){
+        if(gameFrame % 20 === 0){
             silverAnchioArray.push(new silverAnchiovy());
         }
         for(let i = 0; i < silverAnchioArray.length; i++){
@@ -279,10 +303,10 @@ function silverAnchiovyControl (){
 
             if(silverAnchioArray[i].distance < silverAnchioArray[i].radius + player.radius){
                 if(!silverAnchioArray[i].counted){
-                    if(silverAnchioArray[i].sound == 'gameover1'){
-                        gameover1.play();
+                    if(silverAnchioArray[i].sound == 'scoreFail'){
+                        scoreFail.play();
                     }
-                    score -= 1;
+                    score -= 2;
                     silverAnchioArray[i].counted = true;
                     silverAnchioArray.splice(i,1);
                 }
@@ -303,7 +327,7 @@ function animate (){
     player.update();
     player.draw();
     ctx.fillStyle = "white";
-    ctx.fillText("Score:" + " " + score, 850, 485);
+    ctx.fillText("Score:" + " " + score, 1200, 45);
     gameFrame ++;
     requestAnimationFrame(animate);
 
