@@ -1,28 +1,31 @@
-//canva setup
+//CANVAS SETUP
 const canvas = document.getElementById ("canvas1");
 
-//to get access to 2D drawing method
+//TO GET ACESS TO 2D DRAWING
 const ctx = canvas.getContext('2d');
 
 canvas.width = 1350;
 canvas.height = 650;
 
 
-//Initialize game state with start button and timer
+//INITIALIZE GAME STATE
 let gameStarted = false; 
 let timer = 120;
+let gameOver = false;
+
+
 
 function startGame (){
     gameStarted = true;
-    timer = 120;
+    timer = 60;
     document.getElementById('startButton').style.display = 'none';
     document.getElementById('introText').style.display = 'none';
     document.getElementById('level1').style.display = 'none';
     
-    setInterval(countDown, 1000);
+    setInterval(countDown, 100);
+
 };
 
-    
 
 
 function countDown (){
@@ -35,28 +38,64 @@ function countDown (){
     let secondsDisplay = seconds < 10 ? '0' + seconds : seconds;
 
     timerElement.innerText = minutesDisplay + ':' + secondsDisplay;
-    timer --;
-
-};
     
 
+    if(timer === 0 || score < 0){
+        gameOverControl();
+    } else {
+        timer --;
+    }
+
+};
 
 
-//scoring progression
+
+
+//GAMEOVER
+function gameOverControl (){ 
+    gameStarted = false;
+    ctx.fillStyle = 'white';
+    ctx.fillText ('GAME OVER', 600, 300);
+    gameOver = true;
+    gameOverSound.play();
+    tryingAgain();
+
+};
+
+const restartGame = document.querySelector('tryAgain');
+tryAgain.addEventListener('click', () => {
+    window.location.reload();
+    
+});
+
+function tryingAgain () {
+    document.getElementById('tryAgain').style.display = 'block';
+};
+
+
+
+
+
+//SCORING PROGRESSION
 let score = 0;
 let gameFrame = 0;
 ctx.font = '25px fantasy'; // to display text
 
 
 
-//mouse capture
+//MOUSE CAPTURE
 let insideCanvas = canvas.getBoundingClientRect(); 
 
 const mouse = {
     x: canvas.width / 2,
     y: canvas.height / 2,
     click: false
-}
+};
+
+
+
+
+
 
 
 //mouse interactivity
@@ -78,6 +117,9 @@ eatSound1.src = './sound/bite_sound.wav';
 
 const scoreFail = document.createElement('audio');
 scoreFail.src = './sound/score_fail.wav';
+
+const gameOverSound = document.createElement('audio');
+gameOverSound.src = './sound/gameover.wav';
 
 
 
@@ -306,7 +348,7 @@ function silverAnchiovyControl (){
                     if(silverAnchioArray[i].sound == 'scoreFail'){
                         scoreFail.play();
                     }
-                    score -= 2;
+                    score -= 1;
                     silverAnchioArray[i].counted = true;
                     silverAnchioArray.splice(i,1);
                 }
@@ -329,7 +371,7 @@ function animate (){
     ctx.fillStyle = "white";
     ctx.fillText("Score:" + " " + score, 1200, 45);
     gameFrame ++;
-    requestAnimationFrame(animate);
+    if(!gameOver)requestAnimationFrame(animate);
 
 }
 animate();

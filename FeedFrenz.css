@@ -25,11 +25,11 @@ body {
 }
 
 
-#startButton {
-    font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+#startButton, #tryAgain{
+    font-family: fantasy;
     font-size: 35px;
     color: whitesmoke;
-    width: 950px;
+    width: 350px;
     height: 50px;
     position: absolute;
     content: '';
@@ -43,8 +43,8 @@ body {
     transition: background-color 0.3s ease;
 }
 
-#startButton:hover {
-    background-color:rgb(201, 157, 242);
+#startButton:hover, #tryAgain:hover {
+    background-color:rgb(6, 79, 94);
 }
 
 
@@ -89,3 +89,6 @@ body {
     font-family: fantasy;
     font-size: 22px;
 }
+
+
+
