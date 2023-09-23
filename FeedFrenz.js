@@ -415,7 +415,7 @@ function silverAnchiovyControl (){
                     if(silverAnchioArray[i].sound == 'scoreFail'){
                         scoreFail.play();
                     }
-                    score -= 1;
+                    score -= 2;
                     silverAnchioArray[i].counted = true;
                     silverAnchioArray.splice(i,1);
                 }
@@ -545,9 +545,16 @@ class powerStar {
 
 const powerUp1 = new powerStar();
 
+
+function extraTime (){
+    timer += 10;
+}
+
+
+
 function powerUpControl (){
     if(gameStarted){
-        if(gameFrame % 200 === 0){
+        if(gameFrame % 250 === 0){
             yellowPowerArr.push(new powerStar());
         }
         for(let i = 0; i < yellowPowerArr.length; i++){
@@ -559,19 +566,16 @@ function powerUpControl (){
                     if(yellowPowerArr[i].sound == 'starSound'){
                         starSound.play();
                     }
-                    score += 10;
+                    score += 5;
                     yellowPowerArr[i].counted = true;
                     yellowPowerArr.splice(i,1);
+                    extraTime();
                 }
             }
         }
     }
 
 }
-
-
-
-
 
 
 
