@@ -174,6 +174,9 @@ backgroundMusic.src ='./sound/background_music.mp3';
 const winMusic = document.createElement('audio');
 winMusic.src = './sound/win2music.wav';
 
+const starSound = document.createElement('audio');
+starSound.src = './sound/shimmer_1.wav';
+
 
 
 //PLAYER
@@ -254,6 +257,7 @@ const player = new Player ();
 const anchiovyArray = [];
 const silverAnchioArray = [];
 const enemyFish1 = [];
+const yellowPowerArr = [];
 
 
 const anchiovyImagePink = new Image();
@@ -264,6 +268,11 @@ anchiovyImageSilver.src = './images/silver_anchiovis.png';
 
 const redFishEnemy = new Image();
 redFishEnemy.src = './images/enemy_fish.png';
+
+
+const yellowStar = new Image();
+yellowStar.src = './images/yellow_star.png';
+
 
 
 class anchiovy {
@@ -317,7 +326,7 @@ class silverAnchiovy  {
     constructor () {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
-        this.radius = 25;
+        this.radius = 30;
         this.speed = Math.random() * 5 + 1;
         this.distance;
         this.count = false;
@@ -351,8 +360,8 @@ class silverAnchiovy  {
             this.widthSpriteSheet, 
             this.heightSpriteSheet,
             this.x - 30, this.y - 15, 
-            this.widthSpriteSheet/9, 
-            this.heightSpriteSheet/9);
+            this.widthSpriteSheet/8, 
+            this.heightSpriteSheet/8);
     }
 
 }
@@ -362,7 +371,7 @@ class silverAnchiovy  {
 
 function anchiovyControl (){
     if(gameStarted){
-        if(gameFrame % 70 === 0){
+        if(gameFrame % 50 === 0){
             anchiovyArray.push(new anchiovy());
         }
         for (let i = 0; i < anchiovyArray.length; i++){
@@ -426,7 +435,6 @@ class redEnemy {
         this.y = Math.random() * canvas.height;
         this.radius = 55;
         this.speed = Math.random() * 2 + 2;
-        this.sound = 'eatSound1';
         this.frameX = 0; 
         this.frameY = 0; 
         this.frame = 0; 
@@ -444,10 +452,10 @@ class redEnemy {
 
 
     draw(){
-        ctx.fillStyle = "yellow";
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
+        // ctx.fillStyle = "yellow";
+        // ctx.beginPath();
+        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        // ctx.fill();
         ctx.drawImage(redFishEnemy, 
             this.frameX * this.widthSpriteSheet, 
             this.frameY * this.heightSpriteSheet, 
@@ -493,6 +501,80 @@ function redEnemyControl () {
 
 
 
+//POWERUP
+
+class powerStar {
+    constructor (){
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.radius = 40;
+        this.speed = Math.random() * 2 + 2;
+        this.frameX = 0;
+        this.sound = 'starSound';
+        this.frameY = 0; 
+        this.frame = 0; 
+        this.widthSpriteSheet = 512;
+        this.heightSpriteSheet = 512;
+    }
+
+    update(){
+        this.y -= this.speed;
+        const distX = this.x - player.x;
+        const distY = this.y - player.y;
+        this.distance = Math.sqrt(distX * distX + distY*distY);
+
+    }
+
+
+    draw(){
+        // ctx.fillStyle = "yellow";
+        // ctx.beginPath();
+        // ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        // ctx.fill();
+        ctx.drawImage(yellowStar, 
+            this.frameX * this.widthSpriteSheet, 
+            this.frameY * this.heightSpriteSheet, 
+            this.widthSpriteSheet,
+            this.heightSpriteSheet, 
+            this.x - 20, this.y - 15, this.widthSpriteSheet/10, this.heightSpriteSheet/10);
+    
+    }
+
+
+}
+
+const powerUp1 = new powerStar();
+
+function powerUpControl (){
+    if(gameStarted){
+        if(gameFrame % 200 === 0){
+            yellowPowerArr.push(new powerStar());
+        }
+        for(let i = 0; i < yellowPowerArr.length; i++){
+            yellowPowerArr[i].update();
+            yellowPowerArr[i].draw();
+
+            if(yellowPowerArr[i].distance < yellowPowerArr[i].radius + player.radius){
+                if(!yellowPowerArr[i].counted){
+                    if(yellowPowerArr[i].sound == 'starSound'){
+                        starSound.play();
+                    }
+                    score += 10;
+                    yellowPowerArr[i].counted = true;
+                    yellowPowerArr.splice(i,1);
+                }
+            }
+        }
+    }
+
+}
+
+
+
+
+
+
+
 
 
 
@@ -503,6 +585,7 @@ function animate (){
     anchiovyControl();
     silverAnchiovyControl();
     redEnemyControl();
+    powerUpControl();
     player.update();
     player.draw();
     ctx.fillStyle = "white";
