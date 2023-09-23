@@ -25,37 +25,57 @@ body {
 }
 
 
-#startButton, #tryAgain{
-    font-family: fantasy;
-    font-size: 35px;
-    color: whitesmoke;
+#startButton, #tryAgain, #nextbtn {
+    background-color: #a90994;
+    border: 0;
+    border-radius: 56px;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: system-ui,-apple-system,system-ui,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    outline: 0;
+    padding: 16px 21px;
+    position: absolute;
     width: 350px;
     height: 50px;
     position: absolute;
-    content: '';
-    background-color:transparent;
-    border-radius:10px;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%);
-    outline: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#startButton:hover, #tryAgain:hover {
-    background-color:rgb(6, 79, 94);
-}
+    text-align: center;
+    text-decoration: none;
+    transition: all .3s;
+    touch-action: manipulation;
+  }
+  
+  #startButton:before, #tryAgain:before, #nextbtn:before {
+    background-color: initial;
+    background-image: linear-gradient(#fff 0, rgba(255, 255, 255, 0) 100%);
+    border-radius: 125px;
+    content: "";
+    height: 50%;
+    left: 4%;
+    opacity: .5;
+    position: absolute;
+    top: 0;
+    transition: all .3s;
+    width: 92%;
+  }
+  
+  #startButton:hover, #tryAgain:hover, #nextbtn:hover {
+    box-shadow: rgba(255, 255, 255, .2) 0 3px 15px inset, rgba(0, 0, 0, .1) 0 3px 5px, rgba(0, 0, 0, .1) 0 10px 13px;
+    transform: scale(1.05);
+  }
+  
 
 
 #introText {
     position: absolute;
-    top: 130px;
+    top: 120px;
     left: 50%;
     transform: translateX(-50%);
     color:white;
     font-size: 25px;
-    font-family:fantasy;
+    font-family: fantasy;
     font-weight: bold;
     transition: background-color 0.3s ease;
     padding: 20px;
@@ -63,13 +83,13 @@ body {
 }
 
 #introText:hover, #level1:hover{
-    background-color:rgba(15, 82, 102, 0.767);
+    background-color:rgba(6, 105, 148, 0.513);
 
 }
 
 #level1 {
     position: absolute;
-    top: 430px;
+    top: 400px;
     left: 50%;
     transform: translateX(-50%);
     color:aliceblue;
@@ -90,5 +110,34 @@ body {
     font-size: 22px;
 }
 
+
+#levelcompleteMsg, #gameoverMsg, #level2 {
+    position: absolute;
+    top: 230px;
+    left: 35%;
+    color:aliceblue;
+    font-size: 40px;
+    font-family:fantasy;
+    font-weight: bold;
+    padding:20px;
+
+}
+
+#gameoverMsg {
+    top: 230px;
+    left: 40%;
+}
+
+#level2 {
+    top: 15px;
+    left: 5%;
+    font-size: 30px;
+    padding:5px;
+    padding-right: 15px;
+    padding-left: 15px;
+    background-color: rgba(0, 0, 255, 0.469);
+    border-radius: 5px;;
+
+}
 
 

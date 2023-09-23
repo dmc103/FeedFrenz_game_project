@@ -12,6 +12,8 @@ canvas.height = 650;
 let gameStarted = false; 
 let timer = 120;
 let gameOver = false;
+// let anotherLevel = false;
+// let levelCounter = 0;
 
 
 
@@ -21,8 +23,12 @@ function startGame (){
     document.getElementById('startButton').style.display = 'none';
     document.getElementById('introText').style.display = 'none';
     document.getElementById('level1').style.display = 'none';
+    document.getElementById('level2').style.display = 'none';
+   
+
+    backgroundMusic.play();
     
-    setInterval(countDown, 100);
+    setInterval(countDown, 500);
 
 };
 
@@ -40,10 +46,14 @@ function countDown (){
     timerElement.innerText = minutesDisplay + ':' + secondsDisplay;
     
 
-    if(timer === 0 || score < 0){
-        gameOverControl();
+    if(timer === 0) {
+        if(score > 0){
+            nextLevel();
+        } else {
+            gameOverControl();
+        }
     } else {
-        timer --;
+        timer--;
     }
 
 };
@@ -54,11 +64,13 @@ function countDown (){
 //GAMEOVER
 function gameOverControl (){ 
     gameStarted = false;
-    ctx.fillStyle = 'white';
-    ctx.fillText ('GAME OVER', 600, 300);
     gameOver = true;
     gameOverSound.play();
-    tryingAgain();
+    backgroundMusic.pause();
+    document.getElementById('nextbtn').style.display = 'none';
+    document.getElementById('levelcompleteMsg').style.display = 'none';
+    document.getElementById('tryAgain').style.display = 'block';
+    document.getElementById('gameoverMsg').style.display = 'block';
 
 };
 
@@ -68,18 +80,54 @@ tryAgain.addEventListener('click', () => {
     
 });
 
-function tryingAgain () {
-    document.getElementById('tryAgain').style.display = 'block';
-};
-
-
-
 
 
 //SCORING PROGRESSION
 let score = 0;
 let gameFrame = 0;
 ctx.font = '25px fantasy'; // to display text
+
+
+
+
+//LEVEL COMPLETED
+function nextLevel (){
+    gameStarted = false;
+    winMusic.play();
+    backgroundMusic.pause();
+    document.getElementById('nextbtn').style.display = 'block';
+    document.getElementById('levelcompleteMsg').style.display = 'block';
+    document.getElementById('tryAgain').style.display = 'none';
+    document.getElementById('gameoverMsg').style.display = 'none';
+
+
+};
+
+
+
+//START NEW LEVEL
+function startNewLevel (){
+    gameStarted = true;
+    timer = 60;
+    gameOver = false;
+    backgroundMusic.play();
+    winMusic.pause();
+    document.getElementById('startButton').style.display = 'none';
+    document.getElementById('introText').style.display = 'none';
+    document.getElementById('level1').style.display = 'none';
+    document.getElementById('nextbtn').style.display = 'none';
+    document.getElementById('levelcompleteMsg').style.display = 'none';
+    document.getElementById('tryAgain').style.display = 'none';
+    document.getElementById('gameoverMsg').style.display = 'none';
+    document.getElementById('level2').style.display = 'block';
+
+};
+
+const nextGame = document.querySelector('nextbtn');
+nextbtn.addEventListener('click', () => {
+    startNewLevel();
+}); 
+
 
 
 
@@ -95,10 +143,7 @@ const mouse = {
 
 
 
-
-
-
-//mouse interactivity
+//MOUSE INTERACTIVITY
 canvas.addEventListener('mousemove', function(event){
     mouse.click = true;
     mouse.x = event.x - insideCanvas.left;
@@ -111,7 +156,9 @@ canvas.addEventListener('mouseup', function(){
 });
 
 
-//To add sound
+
+
+//TO ADD SOUND
 const eatSound1 = document.createElement('audio');
 eatSound1.src = './sound/bite_sound.wav';
 
@@ -121,9 +168,15 @@ scoreFail.src = './sound/score_fail.wav';
 const gameOverSound = document.createElement('audio');
 gameOverSound.src = './sound/gameover.wav';
 
+const backgroundMusic = document.createElement('audio');
+backgroundMusic.src ='./sound/background_music.mp3';
+
+const winMusic = document.createElement('audio');
+winMusic.src = './sound/win2music.wav';
 
 
-//Player
+
+//PLAYER
 const playerFishLeft = new Image();
 playerFishLeft.src = './images/Blue_left_fish.png';
 
@@ -144,7 +197,7 @@ class Player {
         this.heightSpriteSheet = 327;
     }
 
-    //to update player position
+    //UPDATE PLAYER POSITION
     update(){
         const distX = this.x - mouse.x;
         const distY = this.y - mouse.y;
@@ -193,12 +246,14 @@ class Player {
 
 }
 
+
 const player = new Player ();
 
 
-//Anchiovy Arrays
+//Fish Arrays
 const anchiovyArray = [];
 const silverAnchioArray = [];
+const enemyFish1 = [];
 
 
 const anchiovyImagePink = new Image();
@@ -206,6 +261,9 @@ anchiovyImagePink.src = './images/pink_anchiovis.png';
 
 const anchiovyImageSilver = new Image();
 anchiovyImageSilver.src = './images/silver_anchiovis.png';
+
+const redFishEnemy = new Image();
+redFishEnemy.src = './images/enemy_fish.png';
 
 
 class anchiovy {
@@ -228,7 +286,7 @@ class anchiovy {
 
 
     update(){
-        this.x -= this.speed;
+        this.x += this.speed;
         const distX = this.x - player.x;
         const distY = this.y - player.y;
         this.distance = Math.sqrt(distX * distX + distY*distY);
@@ -336,7 +394,7 @@ function anchiovyControl (){
 
 function silverAnchiovyControl (){
     if(gameStarted){
-        if(gameFrame % 20 === 0){
+        if(gameFrame % 80 === 0){
             silverAnchioArray.push(new silverAnchiovy());
         }
         for(let i = 0; i < silverAnchioArray.length; i++){
@@ -360,20 +418,100 @@ function silverAnchiovyControl (){
 
 
 
+//ENEMY1
 
-//Animation Loop
+class redEnemy {
+    constructor (){
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.radius = 55;
+        this.speed = Math.random() * 2 + 2;
+        this.sound = 'eatSound1';
+        this.frameX = 0; 
+        this.frameY = 0; 
+        this.frame = 0; 
+        this.widthSpriteSheet = 622;
+        this.heightSpriteSheet = 451;
+    }
+
+    update(){
+        this.x += this.speed;
+        const distX = this.x - player.x;
+        const distY = this.y - player.y;
+        this.distance = Math.sqrt(distX * distX + distY*distY);
+
+    }
+
+
+    draw(){
+        ctx.fillStyle = "yellow";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.drawImage(redFishEnemy, 
+            this.frameX * this.widthSpriteSheet, 
+            this.frameY * this.heightSpriteSheet, 
+            this.widthSpriteSheet,
+            this.heightSpriteSheet, 
+            this.x - 70, this.y - 45, this.widthSpriteSheet/4, this.heightSpriteSheet/4);
+    
+    }
+
+}
+
+
+const fishEnemy = new redEnemy();
+
+
+function redEnemyControl () {
+    if(gameStarted && !gameOver){
+        if(gameFrame % 80 === 0){
+            enemyFish1.push(new redEnemy());
+        }
+        for(let i = 0; i < enemyFish1.length; i++){
+            enemyFish1[i].update();
+            enemyFish1[i].draw();
+
+            if(enemyFish1[i].distance < enemyFish1[i].radius + player.radius){
+                if(!enemyFish1[i].counted){
+                    if(enemyFish1[i].sound == 'scoreFail'){
+                        scoreFail.play();
+                    }
+                    score = 0;
+                    enemyFish1[i].counted = true;
+                    enemyFish1.splice (i, 1);
+
+                    gameOver = true;
+                    gameOverControl();
+                    timer = 0;
+                }
+            }
+        }
+    }
+    
+}
+
+
+
+
+
+
+
+//ANIMATION LOOP
 function animate (){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     anchiovyControl();
     silverAnchiovyControl();
+    redEnemyControl();
     player.update();
     player.draw();
     ctx.fillStyle = "white";
     ctx.fillText("Score:" + " " + score, 1200, 45);
     gameFrame ++;
-    if(!gameOver)requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 
 }
+
 animate();
 
 
