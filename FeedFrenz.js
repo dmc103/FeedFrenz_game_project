@@ -270,7 +270,8 @@ class Player {
         this.radius = 30;
         this.angle = 0;
         this.frameX = 0; 
-        this.frameY = 0; 
+        this.frameY = 0;
+        this.gameFrame = 0; 
         this.frame = 0; 
         this.widthSpriteSheet = 498;
         this.heightSpriteSheet = 327;
@@ -286,6 +287,24 @@ class Player {
         if(mouse.y != this.y){
             this.y -= distY/20;
         }
+        
+        //TO ANIMATE PLAYER
+        // if(this.gameFrame % 4 === 0){
+        //     this.frame++;
+        //     if(this.frame >= 12) this.frame = 0;
+        //     if(this.frame === 3 || this.frame === 7 || this.frame === 11){
+        //         this.frameX = 0;
+        //     } else {
+        //         this.frameX++;
+        //     }
+        //     if(this.frame < 3) this.frameY = 0;
+        //     else if (this.frame < 7) this.frameY = 1;
+        //     else if (this.frame < 11) this.frameY = 2;
+        //     else this.frameY = 0;
+
+        // }
+
+
     }
 
     draw(){
@@ -515,6 +534,7 @@ class redEnemy {
         this.frameX = 0; 
         this.frameY = 0; 
         this.frame = 0; 
+        this.gameFrame = 0;
         this.widthSpriteSheet = 622;
         this.heightSpriteSheet = 451;
     }
@@ -524,6 +544,22 @@ class redEnemy {
         const distX = this.x - player.x;
         const distY = this.y - player.y;
         this.distance = Math.sqrt(distX * distX + distY*distY);
+
+        if(this.gameFrame % 2 === 0){
+            this.frame++;
+            if(this.frame >= 16) this.frame = 0;
+            if(this.frame === 3 || this.frame === 7 || this.frame === 11 || this.frame === 15){
+                this.frameX = 0;
+            } else {
+                this.frameX++;
+            }
+            if(this.frame < 3) this.frameY = 0;
+            else if (this.frame < 7) this.frameY = 1;
+            else if (this.frame < 11) this.frameY = 2;
+            else if (this.frame < 15) this.frameY = 3;
+            else this.frameY = 0;
+
+        }
 
     }
 
@@ -550,7 +586,7 @@ const fishEnemy = new redEnemy();
 
 function redEnemyControl () {
     if(gameStarted && !gameOver){
-        if(gameFrame % 80 === 0){
+        if(gameFrame % 90 === 0){
             enemyFish1.push(new redEnemy());
         }
         for(let i = 0; i < enemyFish1.length; i++){
@@ -593,6 +629,7 @@ class powerStar {
         this.sound = 'starSound';
         this.frameY = 0; 
         this.frame = 0; 
+        this.gameFrame = 0;
         this.widthSpriteSheet = 512;
         this.heightSpriteSheet = 512;
     }
@@ -604,7 +641,7 @@ class powerStar {
         this.distance = Math.sqrt(distX * distX + distY*distY);
 
     }
-
+    
 
     draw(){
         // ctx.fillStyle = "yellow";

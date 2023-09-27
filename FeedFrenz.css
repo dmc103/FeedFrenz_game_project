@@ -88,7 +88,7 @@ body {
 
 }
 
-#level1 {
+#level1, #highscore, #highScoreVal {
     position: absolute;
     top: 440px;
     left: 50%;
@@ -102,15 +102,7 @@ body {
 }
 
 #highscore, #highScoreVal {
-    position: absolute;
-    top: 450px;
-    left: 50%;
-    transform: translateX(-50%);
-    color:aliceblue;
     font-size: 40px;
-    font-family:fantasy;
-    font-weight: bold;
-    
 }
 
 
