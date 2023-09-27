@@ -4,30 +4,24 @@ const canvas = document.getElementById ("canvas1");
 //TO GET ACESS TO 2D DRAWING
 const ctx = canvas.getContext('2d');
 
-canvas.width = 1350;
-canvas.height = 650;
+canvas.width = 1400;
+canvas.height = 750;
 
 
 //INITIALIZE GAME STATE
 let gameStarted = false; 
 let timer = 120;
 let gameOver = false;
-// let anotherLevel = false;
-// let levelCounter = 0;
-
 
 
 function startGame (){
     gameStarted = true;
     timer = 60;
+    backgroundMusic.play();
     document.getElementById('startButton').style.display = 'none';
     document.getElementById('introText').style.display = 'none';
     document.getElementById('level1').style.display = 'none';
-    document.getElementById('level2').style.display = 'none';
-   
 
-    backgroundMusic.play();
-    
     setInterval(countDown, 500);
 
 };
@@ -44,10 +38,10 @@ function countDown (){
     let secondsDisplay = seconds < 10 ? '0' + seconds : seconds;
 
     timerElement.innerText = minutesDisplay + ':' + secondsDisplay;
-    
 
+    //WINNING CONDITION
     if(timer === 0) {
-        if(score > 0){
+        if(score > 10 && life > 0){
             nextLevel();
         } else {
             gameOverControl();
@@ -60,13 +54,13 @@ function countDown (){
 
 
 
-
 //GAMEOVER
 function gameOverControl (){ 
     gameStarted = false;
     gameOver = true;
     gameOverSound.play();
     backgroundMusic.pause();
+    displayHighScore();
     document.getElementById('nextbtn').style.display = 'none';
     document.getElementById('levelcompleteMsg').style.display = 'none';
     document.getElementById('tryAgain').style.display = 'block';
@@ -84,8 +78,82 @@ tryAgain.addEventListener('click', () => {
 
 //SCORING PROGRESSION
 let score = 0;
+let highScore = 0;
+let life = 3;
 let gameFrame = 0;
-ctx.font = '25px fantasy'; // to display text
+let gameLevel = 1;
+const maxLevel = 3;
+
+ 
+//TO DISPLAY SCORE
+
+function displayScore (context){
+    context.fillStyle = 'white';
+    context.font = '30px fantasy';
+    context.fillText("Score:" + " " + score, 1185, 50);
+
+}
+
+
+//DISPLAY HIGHSCORE
+
+function displayHighScore (){
+    const oldHighScore = parseInt(localStorage.getItem('highScore'), 10);
+
+    if(score > oldHighScore){
+        localStorage.setItem('highScore', score);
+        
+    } else {
+        highScore = oldHighScore;
+    }
+
+    const highScoreValue = document.getElementById('highScoreVal');
+    highScoreValue.textContent = highScore;
+
+    const highScoreText = document.getElementById('highscore');
+    highScoreText.style.display = 'block';
+
+
+}
+
+
+
+
+//TO SHOW GAME STATUS
+
+function updateLifeStat (){
+    const playerLife = document.getElementById('lifeContainer');
+
+    lifeContainer.innerHTML = '';
+
+    for(let i = 0; i < life; i++){
+        const heartImg = new Image();
+        heartImg.src = "./images/player_life.png";
+        heartImg.width = 30;
+        heartImg.height = 30;
+        lifeContainer.appendChild(heartImg);
+    }
+
+}
+
+
+
+function updateLevel (){
+    const levelCount = document.getElementById('levelCounter');
+
+    levelCounter.innerHTML = '';
+
+
+    for(let i = 0; i < gameLevel; i++){
+        const levelImg = new Image();
+        levelImg.src = "./images/level_trophie.png";
+        levelImg.width = 30;
+        levelImg.height = 30;
+        levelCounter.appendChild(levelImg);
+    }
+    
+}
+
 
 
 
@@ -99,7 +167,6 @@ function nextLevel (){
     document.getElementById('levelcompleteMsg').style.display = 'block';
     document.getElementById('tryAgain').style.display = 'none';
     document.getElementById('gameoverMsg').style.display = 'none';
-
 
 };
 
@@ -119,13 +186,15 @@ function startNewLevel (){
     document.getElementById('levelcompleteMsg').style.display = 'none';
     document.getElementById('tryAgain').style.display = 'none';
     document.getElementById('gameoverMsg').style.display = 'none';
-    document.getElementById('level2').style.display = 'block';
-
+    
 };
 
 const nextGame = document.querySelector('nextbtn');
 nextbtn.addEventListener('click', () => {
-    startNewLevel();
+    if(gameLevel < maxLevel){
+        gameLevel++;
+        startNewLevel();
+    }
 }); 
 
 
@@ -139,6 +208,7 @@ const mouse = {
     y: canvas.height / 2,
     click: false
 };
+
 
 
 
@@ -170,12 +240,18 @@ gameOverSound.src = './sound/gameover.wav';
 
 const backgroundMusic = document.createElement('audio');
 backgroundMusic.src ='./sound/background_music.mp3';
+backgroundMusic.loop = true;
+backgroundMusic.volume = 0.5;
 
 const winMusic = document.createElement('audio');
 winMusic.src = './sound/win2music.wav';
+winMusic.volume = 0.5;
 
 const starSound = document.createElement('audio');
 starSound.src = './sound/shimmer_1.wav';
+
+const redBite = document.createElement('audio');
+redBite.src = './sound/red_enemy_bite.ogg';
 
 
 
@@ -371,7 +447,7 @@ class silverAnchiovy  {
 
 function anchiovyControl (){
     if(gameStarted){
-        if(gameFrame % 50 === 0){
+        if(gameFrame % 20 === 0){
             anchiovyArray.push(new anchiovy());
         }
         for (let i = 0; i < anchiovyArray.length; i++){
@@ -380,7 +456,7 @@ function anchiovyControl (){
 
             if(anchiovyArray[i].distance < anchiovyArray[i].radius + player.radius){
                 if(!anchiovyArray[i].counted){
-                    if(anchiovyArray[i].sound == 'eatSound1'){
+                    if(anchiovyArray[i].sound === 'eatSound1'){
                         eatSound1.play();
                     }
                     score++;
@@ -412,7 +488,7 @@ function silverAnchiovyControl (){
 
             if(silverAnchioArray[i].distance < silverAnchioArray[i].radius + player.radius){
                 if(!silverAnchioArray[i].counted){
-                    if(silverAnchioArray[i].sound == 'scoreFail'){
+                    if(silverAnchioArray[i].sound === 'scoreFail'){
                         scoreFail.play();
                     }
                     score -= 2;
@@ -434,6 +510,7 @@ class redEnemy {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.radius = 55;
+        this.sound = 'redBite';
         this.speed = Math.random() * 2 + 2;
         this.frameX = 0; 
         this.frameY = 0; 
@@ -482,16 +559,19 @@ function redEnemyControl () {
 
             if(enemyFish1[i].distance < enemyFish1[i].radius + player.radius){
                 if(!enemyFish1[i].counted){
-                    if(enemyFish1[i].sound == 'scoreFail'){
-                        scoreFail.play();
+                    if(enemyFish1[i].sound == 'redBite'){
+                        redBite.play();
                     }
-                    score = 0;
                     enemyFish1[i].counted = true;
                     enemyFish1.splice (i, 1);
 
-                    gameOver = true;
-                    gameOverControl();
-                    timer = 0;
+                    life --;
+                    
+                    if(life <= 0 ){
+                        gameOver = true;
+                        gameOverControl();
+                        timer = 0;
+                    }
                 }
             }
         }
@@ -546,15 +626,10 @@ class powerStar {
 const powerUp1 = new powerStar();
 
 
-function extraTime (){
-    timer += 10;
-}
-
-
 
 function powerUpControl (){
     if(gameStarted){
-        if(gameFrame % 250 === 0){
+        if(gameFrame % 350 === 0){
             yellowPowerArr.push(new powerStar());
         }
         for(let i = 0; i < yellowPowerArr.length; i++){
@@ -569,7 +644,7 @@ function powerUpControl (){
                     score += 5;
                     yellowPowerArr[i].counted = true;
                     yellowPowerArr.splice(i,1);
-                    extraTime();
+                    timer += 10;
                 }
             }
         }
@@ -586,6 +661,8 @@ function powerUpControl (){
 //ANIMATION LOOP
 function animate (){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    updateLifeStat();
+    updateLevel();
     anchiovyControl();
     silverAnchiovyControl();
     redEnemyControl();
@@ -593,9 +670,9 @@ function animate (){
     player.update();
     player.draw();
     ctx.fillStyle = "white";
-    ctx.fillText("Score:" + " " + score, 1200, 45);
+    displayScore (ctx);
     gameFrame ++;
-    requestAnimationFrame(animate);
+    if(!gameOver)requestAnimationFrame(animate);
 
 }
 

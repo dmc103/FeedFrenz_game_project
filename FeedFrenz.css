@@ -11,13 +11,14 @@ body {
     align-items: center;
     background-image: url("./images/underwater_scene.jpg");
     background-size: cover;
+    overflow: hidden;
 }
 
 
 
 #canvas1 {
-    width: 1350px;
-    height: 650px;
+    width: 1400px;
+    height: 750px;
     border: 3px solid rgb(17, 133, 175);
     background-image: url("./images/underwater_scene.jpg");
     background-size: cover;
@@ -37,10 +38,10 @@ body {
     font-weight: 600;
     outline: 0;
     padding: 16px 21px;
-    position: absolute;
     width: 350px;
     height: 50px;
     position: absolute;
+    top: 350px;
     text-align: center;
     text-decoration: none;
     transition: all .3s;
@@ -70,7 +71,7 @@ body {
 
 #introText {
     position: absolute;
-    top: 120px;
+    top: 160px;
     left: 50%;
     transform: translateX(-50%);
     color:white;
@@ -89,7 +90,7 @@ body {
 
 #level1 {
     position: absolute;
-    top: 400px;
+    top: 440px;
     left: 50%;
     transform: translateX(-50%);
     color:aliceblue;
@@ -100,23 +101,47 @@ body {
     padding:20px;
 }
 
+#highscore, #highScoreVal {
+    position: absolute;
+    top: 450px;
+    left: 50%;
+    transform: translateX(-50%);
+    color:aliceblue;
+    font-size: 40px;
+    font-family:fantasy;
+    font-weight: bold;
+    
+}
+
+
+#highScoreVal {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+
+}
+
 
 #timer {
     position: absolute;
-    top: 38px;
-    left: 79%;
+    top: 35px;
+    left: 8%;
     color:aliceblue;
     font-family: fantasy;
-    font-size: 22px;
+    font-size: 25px;
+    background-color:#92087fd5;
+    padding: 8px;
+    border-radius: 10px;
+    background-image: linear-gradient(#fff 0, rgba(255, 255, 255, 0) 40%);
 }
 
 
 #levelcompleteMsg, #gameoverMsg, #level2 {
     position: absolute;
-    top: 230px;
-    left: 35%;
+    top: 250px;
+    left: 32%;
     color:aliceblue;
-    font-size: 40px;
+    font-size: 45px;
     font-family:fantasy;
     font-weight: bold;
     padding:20px;
@@ -124,20 +149,24 @@ body {
 }
 
 #gameoverMsg {
-    top: 230px;
+    top: 240px;
     left: 40%;
 }
 
-#level2 {
-    top: 15px;
-    left: 5%;
-    font-size: 30px;
-    padding:5px;
-    padding-right: 15px;
-    padding-left: 15px;
-    background-color: rgba(0, 0, 255, 0.469);
-    border-radius: 5px;;
+
+#lifeContainer {
+    position: absolute;
+    top: 50px;
+    left: 17%;
 
 }
+
+#levelCounter {
+    position: absolute;
+    top: 50px;
+    left: 25%;
+}
+
+
 
 
