@@ -14,7 +14,7 @@ let timer = 120;
 let gameOver = false;
 
 
-function startGame (){
+startGame = () => {
     gameStarted = true;
     timer = 60;
     backgroundMusic.play();
@@ -28,7 +28,7 @@ function startGame (){
 
 
 
-function countDown (){
+countDown = () => {
     let minutes = Math.floor(timer / 60);
     let seconds = timer % 60;
 
@@ -55,7 +55,7 @@ function countDown (){
 
 
 //GAMEOVER
-function gameOverControl (){ 
+gameOverControl = () => { 
     gameStarted = false;
     gameOver = true;
     gameOverSound.play();
@@ -87,7 +87,7 @@ const maxLevel = 3;
  
 //TO DISPLAY SCORE
 
-function displayScore (context){
+displayScore = (context) => {
     context.fillStyle = 'white';
     context.font = '30px fantasy';
     context.fillText("Score:" + " " + score, 1185, 50);
@@ -97,7 +97,7 @@ function displayScore (context){
 
 //DISPLAY HIGHSCORE
 
-function displayHighScore (){
+displayHighScore = () => {
     const oldHighScore = parseInt(localStorage.getItem('highScore'), 10);
 
     if(!isNaN(score) && score > oldHighScore){
@@ -115,7 +115,7 @@ function displayHighScore (){
     highScoreText.style.display = 'block';
 
 
-}
+};
 
 
 
@@ -131,7 +131,7 @@ function displayHighScore (){
 
 //TO SHOW GAME STATUS
 
-function updateLifeStat (){
+updateLifeStat = () => {
     const playerLife = document.getElementById('lifeContainer');
 
     lifeContainer.innerHTML = '';
@@ -148,7 +148,7 @@ function updateLifeStat (){
 
 
 
-function updateLevel (){
+updateLevel = () => {
     const levelCount = document.getElementById('levelCounter');
 
     levelCounter.innerHTML = '';
@@ -169,7 +169,7 @@ function updateLevel (){
 
 
 //LEVEL COMPLETED
-function nextLevel (){
+nextLevel = () => {
     gameStarted = false;
     winMusic.play();
     backgroundMusic.pause();
@@ -183,7 +183,7 @@ function nextLevel (){
 
 
 //START NEW LEVEL
-function startNewLevel (){
+startNewLevel = () => {
     gameStarted = true;
     timer = 60;
     gameOver = false;
@@ -474,7 +474,7 @@ class silverAnchiovy  {
 
 
 
-function anchiovyControl (){
+anchiovyControl = () => {
     if(gameStarted){
         if(gameFrame % 20 === 0){
             anchiovyArray.push(new anchiovy());
@@ -506,7 +506,7 @@ function anchiovyControl (){
 
 
 
-function silverAnchiovyControl (){
+silverAnchiovyControl = () => {
     if(gameStarted){
         if(gameFrame % 80 === 0){
             silverAnchioArray.push(new silverAnchiovy());
@@ -594,7 +594,7 @@ class redEnemy {
 const fishEnemy = new redEnemy();
 
 
-function redEnemyControl () {
+redEnemyControl = () => {
     if(gameStarted && !gameOver){
         if(gameFrame % 90 === 0){
             enemyFish1.push(new redEnemy());
@@ -674,7 +674,7 @@ const powerUp1 = new powerStar();
 
 
 
-function powerUpControl (){
+powerUpControl = () => {
     if(gameStarted){
         if(gameFrame % 350 === 0){
             yellowPowerArr.push(new powerStar());
@@ -706,7 +706,7 @@ function powerUpControl (){
 
 
 //ANIMATION LOOP
-function animate (){
+animate = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     updateLifeStat();
     updateLevel();
