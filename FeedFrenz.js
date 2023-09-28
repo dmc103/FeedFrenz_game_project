@@ -101,7 +101,7 @@ function displayHighScore (){
     const oldHighScore = parseInt(localStorage.getItem('highScore'), 10);
 
     if(score > oldHighScore){
-        localStorage.setItem('highScore', score);
+        localStorage.setItem('highScore');
         
     } else {
         highScore = oldHighScore;
