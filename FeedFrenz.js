@@ -108,7 +108,7 @@ function displayHighScore (){
     }
 
     const highScoreValue = document.getElementById('highScoreVal');
-    highScoreValue.textContent = highScore;
+    highScoreValue.textContent = score;
 
     const highScoreText = document.getElementById('highscore');
     highScoreText.style.display = 'block';
