@@ -95,35 +95,12 @@ function displayScore (context){
 }
 
 
-// DISPLAY HIGHSCORE
-
-// function displayHighScore (){
-//     const oldHighScore = parseInt(localStorage.getItem('highScore'), 10);
-
-//     if(score > oldHighScore){
-//         localStorage.setItem('highScore');
-        
-//     } else {
-//         highScore = oldHighScore;
-//     }
-
-//     const highScoreValue = document.getElementById('highScoreVal');
-//     highScoreValue.textContent = highScore;
-
-//     const highScoreText = document.getElementById('highscore');
-//     highScoreText.style.display = 'block';
-
-
-// }
-
-
 //DISPLAY HIGHSCORE
 
 function displayHighScore (){
-    try {
     const oldHighScore = parseInt(localStorage.getItem('highScore'), 10);
 
-    if(score > oldHighScore){
+    if(!isNaN(score) && score > oldHighScore){
         localStorage.setItem('highScore');
         
     } else {
@@ -137,12 +114,9 @@ function displayHighScore (){
     highScoreText.style.display = 'block';
 
 
-    } catch (e) {
-        console.error('localStorage error:', e);
-    }
-    
-
 }
+
+
 
 
 
