@@ -101,7 +101,7 @@ function displayHighScore (){
     const oldHighScore = parseInt(localStorage.getItem('highScore'), 10);
 
     if(!isNaN(score) && score > oldHighScore){
-        localStorage.setItem('highScore', true);
+        localStorage.setItem('highScore', 'score');
         
     } else {
         highScore = oldHighScore;
