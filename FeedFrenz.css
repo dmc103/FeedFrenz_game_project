@@ -78,6 +78,7 @@ body {
     font-size: 25px;
     font-family: fantasy;
     font-weight: bold;
+    font-size: 70px;
     transition: background-color 0.3s ease;
     padding: 20px;
     
@@ -100,6 +101,7 @@ body {
     transition: background-color 0.3s ease;
     padding:20px;
 }
+
 
 #highscore, #highScoreVal {
     font-size: 40px;
