@@ -101,14 +101,15 @@ function displayHighScore (){
     const oldHighScore = parseInt(localStorage.getItem('highScore'), 10);
 
     if(!isNaN(score) && score > oldHighScore){
-        localStorage.setItem('highScore', score);
+        localStorage.setItem('highScore', true);
         
     } else {
-        score = oldHighScore;
+        highScore = oldHighScore;
     }
 
+
     const highScoreValue = document.getElementById('highScoreVal');
-    highScoreValue.textContent = score;
+    highScoreValue.textContent = highScore;
 
     const highScoreText = document.getElementById('highscore');
     highScoreText.style.display = 'block';
