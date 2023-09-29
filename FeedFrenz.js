@@ -98,7 +98,7 @@ displayScore = (context) => {
 //DISPLAY HIGHSCORE
 
 displayHighScore = () => {
-    const oldHighScore = parseInt(localStorage.getItem('highScore'), 10);
+    const oldHighScore = localStorage.getItem('highScore');
 
     if(!isNaN(score) && score > oldHighScore){
         localStorage.setItem('highScore', score);
@@ -106,7 +106,7 @@ displayHighScore = () => {
     } else {
         highScore = oldHighScore;
     }
-
+    
 
     const highScoreValue = document.getElementById('highScoreVal');
     highScoreValue.textContent = highScore;
